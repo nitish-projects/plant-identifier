@@ -1,26 +1,53 @@
-// ================================
+// ========================================
+// PLANT IDENTIFIER - FRONTEND JAVASCRIPT
+// ========================================
+
+// ========================================
+// Backend Configuration
+// ========================================
+
+const API_BASE_URL =
+    "https://plant-identifier-np5i.onrender.com";
+
+
+// ========================================
 // Get HTML Elements
-// ================================
+// ========================================
 
-const themeToggle = document.getElementById("themeToggle");
+const themeToggle =
+    document.getElementById("themeToggle");
 
-const plantImage = document.getElementById("plantImage");
-const uploadArea = document.getElementById("uploadArea");
+const plantImage =
+    document.getElementById("plantImage");
 
-const imagePreview = document.getElementById("imagePreview");
-const previewImage = document.getElementById("previewImage");
+const uploadArea =
+    document.getElementById("uploadArea");
 
-const removeImage = document.getElementById("removeImage");
-const identifyButton = document.getElementById("identifyButton");
+const imagePreview =
+    document.getElementById("imagePreview");
 
-const resultSection = document.getElementById("result");
-const resultImage = document.getElementById("resultImage");
+const previewImage =
+    document.getElementById("previewImage");
 
-const loadingMessage = document.getElementById("loadingMessage");
+const removeImage =
+    document.getElementById("removeImage");
 
-// ================================
+const identifyButton =
+    document.getElementById("identifyButton");
+
+const resultSection =
+    document.getElementById("result");
+
+const resultImage =
+    document.getElementById("resultImage");
+
+const loadingMessage =
+    document.getElementById("loadingMessage");
+
+
+// ========================================
 // Dark Mode
-// ================================
+// ========================================
 
 if (themeToggle) {
 
@@ -28,7 +55,10 @@ if (themeToggle) {
 
         document.body.classList.toggle("dark-mode");
 
-        if (document.body.classList.contains("dark-mode")) {
+        const darkMode =
+            document.body.classList.contains("dark-mode");
+
+        if (darkMode) {
 
             themeToggle.textContent = "☀️";
 
@@ -50,15 +80,16 @@ if (themeToggle) {
 }
 
 
-// ================================
+// ========================================
 // Select Image
-// ================================
+// ========================================
 
 if (plantImage) {
 
     plantImage.addEventListener("change", () => {
 
-        const file = plantImage.files[0];
+        const file =
+            plantImage.files[0];
 
         if (!file) {
             return;
@@ -78,25 +109,33 @@ if (plantImage) {
 }
 
 
-// ================================
+// ========================================
 // Show Image Preview
-// ================================
+// ========================================
 
 function showImage(file) {
 
-    const imageURL = URL.createObjectURL(file);
+    const imageURL =
+        URL.createObjectURL(file);
 
-    previewImage.src = imageURL;
+    previewImage.src =
+        imageURL;
 
-    imagePreview.hidden = false;
+    imagePreview.hidden =
+        false;
 
-    identifyButton.disabled = false;
+    identifyButton.disabled =
+        false;
+
+    // Hide previous result
+    resultSection.hidden =
+        true;
 }
 
 
-// ================================
+// ========================================
 // Remove Selected Image
-// ================================
+// ========================================
 
 if (removeImage) {
 
@@ -115,79 +154,98 @@ if (removeImage) {
 }
 
 
-// ================================
+// ========================================
 // Drag and Drop
-// ================================
+// ========================================
 
 if (uploadArea) {
 
-    uploadArea.addEventListener("dragover", (event) => {
+    uploadArea.addEventListener(
+        "dragover",
+        (event) => {
 
-        event.preventDefault();
+            event.preventDefault();
 
-        uploadArea.classList.add("drag-over");
-    });
-
-
-    uploadArea.addEventListener("dragleave", () => {
-
-        uploadArea.classList.remove("drag-over");
-    });
-
-
-    uploadArea.addEventListener("drop", (event) => {
-
-        event.preventDefault();
-
-        uploadArea.classList.remove("drag-over");
-
-        const file = event.dataTransfer.files[0];
-
-        if (!file) {
-            return;
-        }
-
-        if (!file.type.startsWith("image/")) {
-
-            alert("Please upload an image file.");
-
-            return;
-        }
-
-        try {
-
-            const dataTransfer = new DataTransfer();
-
-            dataTransfer.items.add(file);
-
-            plantImage.files = dataTransfer.files;
-
-        } catch (error) {
-
-            console.warn(
-                "Could not assign dropped file:",
-                error
+            uploadArea.classList.add(
+                "drag-over"
             );
         }
+    );
 
-        showImage(file);
-    });
+
+    uploadArea.addEventListener(
+        "dragleave",
+        () => {
+
+            uploadArea.classList.remove(
+                "drag-over"
+            );
+        }
+    );
+
+
+    uploadArea.addEventListener(
+        "drop",
+        (event) => {
+
+            event.preventDefault();
+
+            uploadArea.classList.remove(
+                "drag-over"
+            );
+
+            const file =
+                event.dataTransfer.files[0];
+
+            if (!file) {
+                return;
+            }
+
+            if (!file.type.startsWith("image/")) {
+
+                alert(
+                    "Please upload an image file."
+                );
+
+                return;
+            }
+
+            try {
+
+                const dataTransfer =
+                    new DataTransfer();
+
+                dataTransfer.items.add(file);
+
+                plantImage.files =
+                    dataTransfer.files;
+
+            } catch (error) {
+
+                console.warn(
+                    "Could not assign dropped file:",
+                    error
+                );
+            }
+
+            showImage(file);
+        }
+    );
 }
 
 
-// ================================
+// ========================================
 // Identify Plant
-// ================================
+// ========================================
 
 if (identifyButton) {
 
     identifyButton.addEventListener(
         "click",
         async () => {
-            loadingMessage.hidden = false;
-            loadingMessage.hidden = true;
 
-            const file = plantImage.files[0];
+            const file =
+                plantImage.files[0];
 
             if (!file) {
 
@@ -199,7 +257,13 @@ if (identifyButton) {
             }
 
 
-            // Disable button while processing
+            // ========================================
+            // Start Loading
+            // ========================================
+
+            if (loadingMessage) {
+                loadingMessage.hidden = false;
+            }
 
             identifyButton.disabled = true;
 
@@ -210,10 +274,11 @@ if (identifyButton) {
             try {
 
                 // ========================================
-                // Send image to Node.js backend
+                // Create FormData
                 // ========================================
 
-                const formData = new FormData();
+                const formData =
+                    new FormData();
 
                 formData.append(
                     "image",
@@ -221,22 +286,42 @@ if (identifyButton) {
                 );
 
 
-                const response = await fetch(
-                    "https://plant-identifier-np5i.onrender.com/api/identify" ,
-                    {
-                        method: "POST",
-                        body: formData
-                    }
+                // ========================================
+                // Send Image to Backend
+                // ========================================
+
+                console.log(
+                    "Sending image to backend..."
                 );
 
 
+                const response =
+                    await fetch(
+                        `${API_BASE_URL}/api/identify`,
+                        {
+                            method: "POST",
+                            body: formData
+                        }
+                    );
+
+
                 // ========================================
-                // Read Pl@ntNet response
+                // Read Response
                 // ========================================
 
                 const data =
                     await response.json();
 
+
+                console.log(
+                    "Backend response:",
+                    data
+                );
+
+
+                // ========================================
+                // Handle Backend Error
+                // ========================================
 
                 if (!response.ok) {
 
@@ -247,27 +332,8 @@ if (identifyButton) {
                 }
 
 
-                console.log(
-                    "Pl@ntNet response:",
-                    data
-                );
-
-
                 // ========================================
-                // Show result section
-                // ========================================
-
-                resultSection.hidden = false;
-
-
-                // Show uploaded image
-
-                resultImage.src =
-                    URL.createObjectURL(file);
-
-
-                // ========================================
-                // Get best plant result
+                // Get Best Plant Result
                 // ========================================
 
                 const bestResult =
@@ -277,7 +343,7 @@ if (identifyButton) {
                 if (!bestResult) {
 
                     throw new Error(
-                        "No plant result was returned."
+                        "No plant result was returned by Pl@ntNet."
                     );
                 }
 
@@ -288,112 +354,175 @@ if (identifyButton) {
 
                 const confidence =
                     Math.round(
-                        bestResult.score * 100
+                        (bestResult.score || 0) * 100
                     );
 
 
                 // ========================================
-                // Species information
+                // Species
                 // ========================================
 
                 const species =
                     bestResult.species || {};
 
 
-                // Scientific name
-
-                const scientificName =
-                    species.scientificName ||
-                    "Scientific name unavailable";
-
-
-                // Common names
+                // ========================================
+                // Common Name
+                // ========================================
 
                 const commonNames =
-                    species.commonNames || [];
+                    Array.isArray(
+                        species.commonNames
+                    )
+                        ? species.commonNames
+                        : [];
 
 
                 const mainCommonName =
                     commonNames.length > 0
                         ? commonNames[0]
-                        : "Unknown plant";
+                        : (
+                            species.scientificNameWithoutAuthor ||
+                            species.scientificName ||
+                            "Unknown plant"
+                        );
 
 
+                // ========================================
+                // Scientific Name
+                // ========================================
+
+                const scientificName =
+                    species.scientificName ||
+                    species.scientificNameWithoutAuthor ||
+                    "Scientific name unavailable";
+
+
+                // ========================================
                 // Family
+                // ========================================
 
                 const family =
                     species.family?.scientificName ||
-                    "Family information unavailable";
+                    "Not available";
 
 
+                // ========================================
                 // Genus
+                // ========================================
 
                 const genus =
                     species.genus?.scientificName ||
-                    "Genus information unavailable";
+                    "Not available";
 
 
                 // ========================================
-                // Get information from GBIF
+                // Get GBIF Information
                 // ========================================
 
-                const gbifResponse =
-                    await fetch(
-                        `http://localhost:3000/api/plant-info?name=${encodeURIComponent(scientificName)}`
+                let gbifData = {};
+
+
+                try {
+
+                    console.log(
+                        "Requesting GBIF information..."
                     );
 
 
-                const gbifData =
-                    await gbifResponse.json();
+                    const gbifResponse =
+                        await fetch(
+                            `${API_BASE_URL}/api/plant-info?name=${encodeURIComponent(scientificName)}`
+                        );
 
 
-                console.log(
-                    "GBIF response:",
-                    gbifData
-                );
+                    if (gbifResponse.ok) {
+
+                        gbifData =
+                            await gbifResponse.json();
+
+                        console.log(
+                            "GBIF response:",
+                            gbifData
+                        );
+
+                    } else {
+
+                        console.warn(
+                            "GBIF request failed."
+                        );
+                    }
+
+                } catch (gbifError) {
+
+                    console.warn(
+                        "GBIF unavailable:",
+                        gbifError
+                    );
+
+                    // Continue using Pl@ntNet information.
+                }
 
 
                 // ========================================
-                // GBIF information
+                // Final Plant Information
                 // ========================================
 
-                const gbifFamily =
-                    gbifData.family ||
-                    family;
-
-
-                const gbifGenus =
-                    gbifData.genus ||
-                    genus;
-
-
-                const gbifOrder =
-                    gbifData.order ||
-                    "Not available";
-
-
-                const gbifKingdom =
-                    gbifData.kingdom ||
-                    "Not available";
-
-
-                const gbifStatus =
-    gbifData.taxonomicStatus ||
-    "ACCEPTED";
-
-
-                const gbifScientificName =
+                const finalScientificName =
                     gbifData.scientificName ||
                     scientificName;
 
 
-                const gbifClass =
+                const finalFamily =
+                    gbifData.family ||
+                    family ||
+                    "Not available";
+
+
+                const finalGenus =
+                    gbifData.genus ||
+                    genus ||
+                    "Not available";
+
+
+                const finalOrder =
+                    gbifData.order ||
+                    "Not available";
+
+
+                const finalClass =
                     gbifData.class ||
                     "Not available";
 
 
+                const finalKingdom =
+                    gbifData.kingdom ||
+                    "Plantae";
+
+
+                const finalStatus =
+                    gbifData.taxonomicStatus ||
+                    "Accepted";
+
+
                 // ========================================
-                // Display Plant Name
+                // Show Result Section
+                // ========================================
+
+                resultSection.hidden =
+                    false;
+
+
+                // ========================================
+                // Show Uploaded Image
+                // ========================================
+
+                resultImage.src =
+                    URL.createObjectURL(file);
+
+
+                // ========================================
+                // Plant Name
                 // ========================================
 
                 const plantNameElement =
@@ -410,7 +539,7 @@ if (identifyButton) {
 
 
                 // ========================================
-                // Display Scientific Name
+                // Scientific Name
                 // ========================================
 
                 const scientificNameElement =
@@ -422,12 +551,12 @@ if (identifyButton) {
                 if (scientificNameElement) {
 
                     scientificNameElement.textContent =
-                        gbifScientificName;
+                        finalScientificName;
                 }
 
 
                 // ========================================
-                // Display Confidence
+                // Confidence
                 // ========================================
 
                 const confidenceElement =
@@ -439,12 +568,12 @@ if (identifyButton) {
                 if (confidenceElement) {
 
                     confidenceElement.textContent =
-                        confidence + "%";
+                        `${confidence}%`;
                 }
 
 
                 // ========================================
-                // Display Family
+                // Family
                 // ========================================
 
                 const familyElement =
@@ -456,121 +585,210 @@ if (identifyButton) {
                 if (familyElement) {
 
                     familyElement.textContent =
-                        gbifFamily;
+                        finalFamily;
                 }
 
 
                 // ========================================
-                // Display Plant Information
+                // Plant Information
                 // ========================================
 
-    // ========================================
-// Display Plant Information
-// ========================================
-
-const descriptionElement =
-    document.getElementById("plantDescription");
-
-if (descriptionElement) {
-
-    descriptionElement.innerHTML = `
-
-        <div class="info-row">
-            <span>🌿 Common Name</span>
-            <span class="info-arrow">→</span>
-            <strong>${mainCommonName}</strong>
-        </div>
-
-        <div class="info-row">
-            <span>🔬 Scientific Name</span>
-            <span class="info-arrow">→</span>
-            <strong>${gbifScientificName}</strong>
-        </div>
-
-        <div class="info-row">
-            <span>🌱 Genus</span>
-            <span class="info-arrow">→</span>
-            <strong>${gbifGenus}</strong>
-        </div>
-
-        <div class="info-row">
-            <span>🌸 Order</span>
-            <span class="info-arrow">→</span>
-            <strong>${gbifOrder}</strong>
-        </div>
-
-        <div class="info-row">
-            <span>🍃 Class</span>
-            <span class="info-arrow">→</span>
-            <strong>${gbifClass}</strong>
-        </div>
-
-        <div class="info-row">
-            <span>🌍 Kingdom</span>
-            <span class="info-arrow">→</span>
-            <strong>${gbifKingdom}</strong>
-        </div>
-
-        <div class="info-row">
-            <span>✅ Taxonomic Status</span>
-            <span class="info-arrow">→</span>
-            <strong>${gbifStatus}</strong>
-        </div>
-
-    `;
-}
-
-// ========================================
-// Display Plant Details
-// ========================================
-
-const detailCommonName =
-    document.getElementById("detailCommonName");
-
-const detailGenus =
-    document.getElementById("detailGenus");
-
-const detailFamily =
-    document.getElementById("detailFamily");
-
-const detailKingdom =
-    document.getElementById("detailKingdom");
+                const descriptionElement =
+                    document.getElementById(
+                        "plantDescription"
+                    );
 
 
-if (detailCommonName) {
-    detailCommonName.textContent =
-        mainCommonName;
-}
+                if (descriptionElement) {
 
-if (detailGenus) {
-    detailGenus.textContent =
-        gbifGenus;
-}
+                    descriptionElement.innerHTML = `
 
-if (detailFamily) {
-    detailFamily.textContent =
-        gbifFamily;
-}
+                        <div class="info-row">
 
-if (detailKingdom) {
-    detailKingdom.textContent =
-        gbifKingdom;
-}
+                            <span>
+                                🌿 Common Name
+                            </span>
+
+                            <span class="info-arrow">
+                                →
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(mainCommonName)}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                🔬 Scientific Name
+                            </span>
+
+                            <span class="info-arrow">
+                                →
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(finalScientificName)}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                🌱 Genus
+                            </span>
+
+                            <span class="info-arrow">
+                                →
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(finalGenus)}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                🌸 Order
+                            </span>
+
+                            <span class="info-arrow">
+                                →
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(finalOrder)}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                🍃 Class
+                            </span>
+
+                            <span class="info-arrow">
+                                →
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(finalClass)}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                🌍 Kingdom
+                            </span>
+
+                            <span class="info-arrow">
+                                →
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(finalKingdom)}
+                            </strong>
+
+                        </div>
+
+
+                        <div class="info-row">
+
+                            <span>
+                                ✅ Taxonomic Status
+                            </span>
+
+                            <span class="info-arrow">
+                                →
+                            </span>
+
+                            <strong>
+                                ${escapeHTML(finalStatus)}
+                            </strong>
+
+                        </div>
+
+                    `;
+                }
+
+
+                // ========================================
+                // Plant Details Cards
+                // ========================================
+
+                const detailCommonName =
+                    document.getElementById(
+                        "detailCommonName"
+                    );
+
+                const detailGenus =
+                    document.getElementById(
+                        "detailGenus"
+                    );
+
+                const detailFamily =
+                    document.getElementById(
+                        "detailFamily"
+                    );
+
+                const detailKingdom =
+                    document.getElementById(
+                        "detailKingdom"
+                    );
+
+
+                if (detailCommonName) {
+
+                    detailCommonName.textContent =
+                        mainCommonName;
+                }
+
+
+                if (detailGenus) {
+
+                    detailGenus.textContent =
+                        finalGenus;
+                }
+
+
+                if (detailFamily) {
+
+                    detailFamily.textContent =
+                        finalFamily;
+                }
+
+
+                if (detailKingdom) {
+
+                    detailKingdom.textContent =
+                        finalKingdom;
+                }
+
 
                 // ========================================
                 // Scroll to Result
                 // ========================================
 
                 resultSection.scrollIntoView({
-                    behavior: "smooth"
+                    behavior: "smooth",
+                    block: "start"
                 });
 
 
             } catch (error) {
-
-                // ========================================
-                // Error Handling
-                // ========================================
 
                 console.error(
                     "Identification error:",
@@ -579,6 +797,7 @@ if (detailKingdom) {
 
 
                 alert(
+                    error.message ||
                     "Unable to identify the plant. Please try again."
                 );
 
@@ -586,254 +805,472 @@ if (detailKingdom) {
             } finally {
 
                 // ========================================
-                // Restore Button
+                // Stop Loading
                 // ========================================
 
-                identifyButton.disabled = false;
+                if (loadingMessage) {
+                    loadingMessage.hidden = true;
+                }
+
+
+                identifyButton.disabled =
+                    false;
+
 
                 identifyButton.textContent =
                     "Identify Plant 🌱";
             }
+
         }
     );
 }
+
+
+// ========================================
+// HTML Escape Helper
+// ========================================
+
+function escapeHTML(value) {
+
+    return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
 
 // ========================================
 // Identify Another Plant
 // ========================================
 
 const anotherPlantButton =
-    document.getElementById("anotherPlantButton");
-    
+    document.getElementById(
+        "anotherPlantButton"
+    );
+
 
 if (anotherPlantButton) {
 
-    anotherPlantButton.addEventListener("click", () => {
-       
+    anotherPlantButton.addEventListener(
+        "click",
+        () => {
 
-        // Clear selected image
-        plantImage.value = "";
+            // Clear image
+            plantImage.value = "";
 
-        // Clear preview
-        previewImage.src = "";
-        imagePreview.hidden = true;
+            // Clear preview
+            previewImage.src = "";
 
-        // Hide result
-        resultSection.hidden = true;
+            imagePreview.hidden = true;
 
-        // Disable identify button
-        identifyButton.disabled = true;
+            // Hide result
+            resultSection.hidden = true;
 
-        // Scroll back to upload section
-        document.getElementById("identifier").scrollIntoView({
-            behavior: "smooth"
-        });
+            // Disable identify button
+            identifyButton.disabled = true;
 
-    });
+            // Reset loading
+            if (loadingMessage) {
+                loadingMessage.hidden = true;
+            }
 
+            // Scroll to upload section
+            const identifier =
+                document.getElementById(
+                    "identifier"
+                );
+
+            if (identifier) {
+
+                identifier.scrollIntoView({
+                    behavior: "smooth"
+                });
+            }
+        }
+    );
 }
+
 
 // ========================================
 // Download Plant Result as PDF
 // ========================================
 
 const downloadResultButton =
-    document.getElementById("downloadResultButton");
+    document.getElementById(
+        "downloadResultButton"
+    );
+
 
 if (downloadResultButton) {
 
-    downloadResultButton.addEventListener("click", () => {
+    downloadResultButton.addEventListener(
+        "click",
+        () => {
 
-        const plantName =
-            document.getElementById("plantName")?.textContent.trim() ||
-            "Plant";
+            const plantName =
+                document
+                    .getElementById("plantName")
+                    ?.textContent
+                    .trim() ||
+                "Plant";
 
-        const scientificName =
-            document.getElementById("scientificName")?.textContent.trim() ||
-            "Not available";
 
-        const confidence =
-            document.getElementById("confidence")?.textContent.trim() ||
-            "Not available";
+            const scientificName =
+                document
+                    .getElementById("scientificName")
+                    ?.textContent
+                    .trim() ||
+                "Not available";
 
-        const family =
-            document.getElementById("plantFamily")?.textContent.trim() ||
-            "Not available";
 
-        const infoRows =
-            document.querySelectorAll("#plantDescription .info-row");
+            const confidence =
+                document
+                    .getElementById("confidence")
+                    ?.textContent
+                    .trim() ||
+                "Not available";
 
-        const details = {};
 
-        infoRows.forEach(row => {
+            const family =
+                document
+                    .getElementById("plantFamily")
+                    ?.textContent
+                    .trim() ||
+                "Not available";
 
-            const label =
-                row.querySelector("span")?.textContent.trim();
 
-            const value =
-                row.querySelector("strong")?.textContent.trim();
-
-            if (label && value) {
-                details[label] = value;
-            }
-        });
-
-        if (!window.jspdf) {
-            alert("PDF library could not be loaded.");
-            return;
-        }
-
-        const { jsPDF } = window.jspdf;
-
-        const pdf = new jsPDF();
-
-        const pageWidth =
-            pdf.internal.pageSize.getWidth();
-
-        pdf.setFontSize(22);
-        pdf.setFont("helvetica", "bold");
-
-        pdf.text(
-            "Plant Identification Report",
-            20,
-            25
-        );
-
-        pdf.setFontSize(11);
-        pdf.setFont("helvetica", "normal");
-
-        pdf.text(
-            "Generated by Plant Identifier",
-            20,
-            33
-        );
-
-        pdf.setDrawColor(79, 143, 91);
-
-        pdf.line(
-            20,
-            40,
-            pageWidth - 20,
-            40
-        );
-
-        pdf.setFontSize(18);
-        pdf.setFont("helvetica", "bold");
-
-        pdf.text(
-            plantName,
-            20,
-            55
-        );
-
-        pdf.setFontSize(12);
-        pdf.setFont("helvetica", "italic");
-
-        pdf.text(
-            scientificName,
-            20,
-            64
-        );
-
-        pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(13);
-
-        pdf.text(
-            "Identification Details",
-            20,
-            82
-        );
-
-        pdf.setFont("helvetica", "normal");
-        pdf.setFontSize(11);
-
-        pdf.text(
-            `Confidence: ${confidence}`,
-            25,
-            94
-        );
-
-        pdf.text(
-            `Family: ${family}`,
-            25,
-            103
-        );
-
-        pdf.setFont("helvetica", "bold");
-        pdf.setFontSize(13);
-
-        pdf.text(
-            "Plant Information",
-            20,
-            122
-        );
-
-        pdf.setFont("helvetica", "normal");
-        pdf.setFontSize(11);
-
-        let y = 135;
-
-        Object.entries(details).forEach(([label, value]) => {
-
-            const cleanLabel =
-                label.replace(/^[^\w]+/, "").trim();
-
-            pdf.setFont("helvetica", "bold");
-
-            pdf.text(
-                `${cleanLabel}:`,
-                25,
-                y
-            );
-
-            pdf.setFont("helvetica", "normal");
-
-            const valueLines =
-                pdf.splitTextToSize(
-                    value,
-                    pageWidth - 85
+            const infoRows =
+                document.querySelectorAll(
+                    "#plantDescription .info-row"
                 );
 
-            pdf.text(
-                valueLines,
-                75,
-                y
-            );
 
-            y += Math.max(
-                9,
-                valueLines.length * 6
-            );
+            const details = {};
 
-            if (y > 270) {
 
-                pdf.addPage();
+            infoRows.forEach(row => {
 
-                y = 25;
+                const spans =
+                    row.querySelectorAll("span");
+
+                const strong =
+                    row.querySelector("strong");
+
+
+                if (!strong) {
+                    return;
+                }
+
+
+                let label = "";
+
+                if (spans.length > 0) {
+
+                    label =
+                        spans[0]
+                            .textContent
+                            .trim();
+                }
+
+
+                const value =
+                    strong.textContent.trim();
+
+
+                if (label && value) {
+
+                    details[label] =
+                        value;
+                }
+
+            });
+
+
+            // ========================================
+            // Check jsPDF
+            // ========================================
+
+            if (!window.jspdf) {
+
+                alert(
+                    "PDF library could not be loaded."
+                );
+
+                return;
             }
-        });
 
-        const pageHeight =
-            pdf.internal.pageSize.getHeight();
 
-        pdf.setFontSize(9);
-        pdf.setTextColor(100);
+            const { jsPDF } =
+                window.jspdf;
 
-        pdf.text(
-            "Plant Identifier • Identification Report",
-            20,
-            pageHeight - 15
-        );
 
-        const safeName =
-            plantName
-                .replace(/[^a-z0-9]/gi, "_")
-                .replace(/_+/g, "_");
+            const pdf =
+                new jsPDF();
 
-        pdf.save(
-            `${safeName}_plant_report.pdf`
-        );
 
-    });
+            const pageWidth =
+                pdf.internal.pageSize.getWidth();
+
+
+            const pageHeight =
+                pdf.internal.pageSize.getHeight();
+
+
+            // ========================================
+            // PDF Header
+            // ========================================
+
+            pdf.setFontSize(22);
+
+            pdf.setFont(
+                "helvetica",
+                "bold"
+            );
+
+
+            pdf.text(
+                "Plant Identification Report",
+                20,
+                25
+            );
+
+
+            pdf.setFontSize(11);
+
+            pdf.setFont(
+                "helvetica",
+                "normal"
+            );
+
+
+            pdf.text(
+                "Generated by Plant Identifier",
+                20,
+                33
+            );
+
+
+            pdf.setDrawColor(
+                79,
+                143,
+                91
+            );
+
+
+            pdf.line(
+                20,
+                40,
+                pageWidth - 20,
+                40
+            );
+
+
+            // ========================================
+            // Plant Name
+            // ========================================
+
+            pdf.setFontSize(18);
+
+            pdf.setFont(
+                "helvetica",
+                "bold"
+            );
+
+
+            pdf.text(
+                plantName,
+                20,
+                55
+            );
+
+
+            pdf.setFontSize(12);
+
+            pdf.setFont(
+                "helvetica",
+                "italic"
+            );
+
+
+            pdf.text(
+                scientificName,
+                20,
+                64
+            );
+
+
+            // ========================================
+            // Identification Details
+            // ========================================
+
+            pdf.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            pdf.setFontSize(13);
+
+
+            pdf.text(
+                "Identification Details",
+                20,
+                82
+            );
+
+
+            pdf.setFont(
+                "helvetica",
+                "normal"
+            );
+
+            pdf.setFontSize(11);
+
+
+            pdf.text(
+                `Confidence: ${confidence}`,
+                25,
+                94
+            );
+
+
+            pdf.text(
+                `Family: ${family}`,
+                25,
+                103
+            );
+
+
+            // ========================================
+            // Plant Information
+            // ========================================
+
+            pdf.setFont(
+                "helvetica",
+                "bold"
+            );
+
+            pdf.setFontSize(13);
+
+
+            pdf.text(
+                "Plant Information",
+                20,
+                122
+            );
+
+
+            pdf.setFont(
+                "helvetica",
+                "normal"
+            );
+
+            pdf.setFontSize(11);
+
+
+            let y = 135;
+
+
+            Object.entries(details)
+                .forEach(
+                    ([label, value]) => {
+
+                        const cleanLabel =
+                            label
+                                .replace(
+                                    /^[^\w]+/,
+                                    ""
+                                )
+                                .trim();
+
+
+                        pdf.setFont(
+                            "helvetica",
+                            "bold"
+                        );
+
+
+                        pdf.text(
+                            `${cleanLabel}:`,
+                            25,
+                            y
+                        );
+
+
+                        pdf.setFont(
+                            "helvetica",
+                            "normal"
+                        );
+
+
+                        const valueLines =
+                            pdf.splitTextToSize(
+                                value,
+                                pageWidth - 85
+                            );
+
+
+                        pdf.text(
+                            valueLines,
+                            75,
+                            y
+                        );
+
+
+                        y += Math.max(
+                            9,
+                            valueLines.length * 6
+                        );
+
+
+                        if (y > 270) {
+
+                            pdf.addPage();
+
+                            y = 25;
+                        }
+
+                    }
+                );
+
+
+            // ========================================
+            // Footer
+            // ========================================
+
+            pdf.setFontSize(9);
+
+            pdf.setTextColor(100);
+
+
+            pdf.text(
+                "Plant Identifier • Identification Report",
+                20,
+                pageHeight - 15
+            );
+
+
+            // ========================================
+            // Save PDF
+            // ========================================
+
+            const safeName =
+                plantName
+                    .replace(
+                        /[^a-z0-9]/gi,
+                        "_"
+                    )
+                    .replace(
+                        /_+/g,
+                        "_"
+                    );
+
+
+            pdf.save(
+                `${safeName}_plant_report.pdf`
+            );
+
+        }
+    );
 }
-
