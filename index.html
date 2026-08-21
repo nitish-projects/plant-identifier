@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Plant Identifier | Discover the Plants Around You</title>
+
+    <meta
+        name="description"
+        content="Identify plants from photos and discover useful information about their care, habitat, and characteristics."
+    >
+
+  <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:,">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <nav class="navbar">
+            <a href="#" class="logo">🌿 Plant Identifier</a>
+
+            <button
+                class="theme-toggle"
+                id="themeToggle"
+                type="button"
+                aria-label="Toggle dark mode"
+            >
+                🌙
+            </button>
+        </nav>
+    </header>
+
+    <main>
+
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <p class="eyebrow">Discover Nature</p>
+
+                <h1>Identify Any Plant</h1>
+
+                <p class="hero-text">
+                    Upload a plant photo and discover what it is,
+                    where it grows, and how to care for it.
+                </p>
+
+                <a href="#identifier" class="primary-button">
+                    Identify a Plant
+                </a>
+            </div>
+        </section>
+
+
+        <section class="identifier-section" id="identifier">
+
+            <div class="section-heading">
+                <p class="eyebrow">Plant Identification</p>
+
+                <h2>What plant did you find?</h2>
+
+                <p>
+                    Upload a clear photo of a plant to begin identification.
+                </p>
+            </div>
+
+
+            <div class="upload-card">
+
+                <label for="plantImage" class="upload-area" id="uploadArea">
+
+                    <span class="upload-icon">🌱</span>
+
+                    <span class="upload-title">
+                        Upload a plant image
+                    </span>
+
+                    <span class="upload-description">
+                        Click to choose an image or drag and drop one here.
+                    </span>
+
+                    <span class="upload-format">
+                        JPG, JPEG, PNG or WEBP
+                    </span>
+
+                    <input
+                        type="file"
+                        id="plantImage"
+                        accept="image/jpeg,image/png,image/webp"
+                        hidden
+                    >
+
+                </label>
+
+
+                <div class="image-preview" id="imagePreview" hidden>
+
+                    <img
+                        id="previewImage"
+                        src=""
+                        alt="Selected plant preview"
+                    >
+
+                    <button
+                        type="button"
+                        id="removeImage"
+                    >
+                        Remove Image
+                    </button>
+
+                </div>
+
+
+                <button
+                    type="button"
+                    class="identify-button"
+                    id="identifyButton"
+                    disabled
+                >
+                    Identify Plant
+                </button>
+
+            </div>
+
+        </section>
+
+<!-- Loading Message -->
+<div class="loading-message" id="loadingMessage" hidden>
+    <span>🌿</span>
+    <p>Identifying your plant...</p>
+    <small>Please wait a moment.</small>
+</div>
+<section class="result-section" id="result" hidden>
+
+    <div class="section-heading">
+        <p class="eyebrow">Identification Result</p>
+        <h2>Your Plant</h2>
+    </div>
+
+
+    <div class="plant-result-card" id="plantResult">
+
+        <!-- Plant Image -->
+        <div class="result-image">
+
+            <img
+                id="resultImage"
+                src=""
+                alt="Identified plant"
+            >
+
+        </div>
+
+
+        <!-- Result Content -->
+        <div class="result-content">
+
+            <p class="result-label">
+                🌿 Identification Result
+            </p>
+
+
+            <h2 id="plantName">
+                Plant name
+            </h2>
+
+
+            <p
+                class="scientific-name"
+                id="scientificName"
+            >
+                Scientific name
+            </p>
+
+
+            <!-- Quick Stats -->
+            <div class="result-stats">
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">
+                        📊
+                    </span>
+
+                    <span class="stat-label">
+                        Confidence
+                    </span>
+
+                    <strong id="confidence">
+                        0%
+                    </strong>
+
+                </div>
+
+
+                <div class="stat-card">
+
+                    <span class="stat-icon">
+                        🌱
+                    </span>
+
+                    <span class="stat-label">
+                        Family
+                    </span>
+
+                    <strong id="plantFamily">
+                        Family
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- Plant Information -->
+            <div class="plant-information">
+
+                <h3>
+                    🌿 Plant Information
+                </h3>
+
+
+                <div
+    class="plant-info-content"
+    id="plantDescription"
+>
+    <div class="info-row">
+        <span>🌿 Common Name</span>
+        <strong>Plant name</strong>
+    </div>
+
+    <div class="info-row">
+        <span>🔬 Scientific Name</span>
+        <strong>Scientific name</strong>
+    </div>
+
+    <div class="info-row">
+        <span>🌱 Genus</span>
+        <strong>Genus</strong>
+    </div>
+
+    <div class="info-row">
+        <span>🌸 Order</span>
+        <strong>Order</strong>
+    </div>
+
+    <div class="info-row">
+        <span>🍃 Class</span>
+        <strong>Class</strong>
+    </div>
+
+    <div class="info-row">
+        <span>🌍 Kingdom</span>
+        <strong>Kingdom</strong>
+    </div>
+
+    <div class="info-row">
+        <span>✅ Taxonomic Status</span>
+        <strong>Accepted</strong>
+        <!-- Plant Details -->
+<div class="plant-details">
+
+    <h3>🌱 Plant Details</h3>
+
+    <div class="details-grid">
+
+        <div class="detail-card">
+            <span class="detail-icon">🌿</span>
+            <span class="detail-label">Common Name</span>
+            <strong id="detailCommonName">Not available</strong>
+        </div>
+
+        <div class="detail-card">
+            <span class="detail-icon">🌱</span>
+            <span class="detail-label">Genus</span>
+            <strong id="detailGenus">Not available</strong>
+        </div>
+
+        <div class="detail-card">
+            <span class="detail-icon">🌸</span>
+            <span class="detail-label">Family</span>
+            <strong id="detailFamily">Not available</strong>
+        </div>
+
+        <div class="detail-card">
+            <span class="detail-icon">🌍</span>
+            <span class="detail-label">Kingdom</span>
+            <strong id="detailKingdom">Not available</strong>
+        </div>
+
+    </div>
+
+</div>
+    </div>
+</div>
+
+            </div>
+
+        </div>
+
+    </div>
+<!-- Identify Another Plant -->
+<div class="another-plant-action">
+
+    <button
+        type="button"
+        id="anotherPlantButton"
+        class="another-plant-button"
+    >
+        🔄 Identify Another Plant
+    </button>
+
+</div>
+<!-- Download Result -->
+<div class="download-result-action">
+
+    <button
+        type="button"
+        id="downloadResultButton"
+        class="download-result-button"
+    >
+        📥 Download Result
+    </button>
+
+</div>
+</section>
+
+    </main>
+
+
+    <footer class="site-footer">
+        <p>
+            Built with 🌱 HTML, CSS and JavaScript.
+        </p>
+    </footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,695 @@
+/* ================================
+   Global Styles
+================================ */
+
+:root {
+    --bg-color: #f4f8f1;
+    --surface-color: #ffffff;
+    --text-color: #1d2a20;
+    --muted-color: #66736a;
+    --primary-color: #2f6b3f;
+    --primary-dark: #235230;
+    --border-color: #dce7dd;
+    --shadow: 0 15px 40px rgba(31, 61, 38, 0.10);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: var(--bg-color);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+button,
+input {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+
+/* ================================
+   Header
+================================ */
+
+.site-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.92);
+    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+}
+
+.navbar {
+    width: min(1100px, 92%);
+    margin: 0 auto;
+    min-height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.theme-toggle {
+    width: 42px;
+    height: 42px;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    background: var(--surface-color);
+}
+
+
+/* ================================
+   Hero
+================================ */
+
+.hero {
+    min-height: 650px;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 80px 20px;
+
+    background:
+        linear-gradient(
+            rgba(244, 248, 241, 0.88),
+            rgba(244, 248, 241, 0.88)
+        ),
+        url("../assets/hero.jpg") center / cover no-repeat;
+}
+
+.hero-content {
+    max-width: 760px;
+}
+
+.eyebrow {
+    color: var(--primary-color);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.hero h1 {
+    font-size: clamp(2.7rem, 7vw, 5rem);
+    line-height: 1.05;
+    margin-bottom: 24px;
+}
+
+.hero-text {
+    max-width: 620px;
+    margin: 0 auto 32px;
+    color: var(--muted-color);
+    font-size: 1.1rem;
+}
+
+.primary-button,
+.identify-button {
+    display: inline-block;
+    border: none;
+    border-radius: 12px;
+    padding: 14px 24px;
+    background: var(--primary-color);
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 700;
+    transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.primary-button:hover,
+.identify-button:hover:not(:disabled) {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+}
+
+
+/* ================================
+   Identifier Section
+================================ */
+
+.identifier-section,
+.result-section {
+    width: min(1000px, 92%);
+    margin: 0 auto;
+    padding: 90px 0;
+}
+
+.section-heading {
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto 40px;
+}
+
+.section-heading h2 {
+    font-size: clamp(2rem, 5vw, 3rem);
+    margin-bottom: 12px;
+}
+
+.section-heading > p:last-child {
+    color: var(--muted-color);
+}
+
+
+/* ================================
+   Upload Card
+================================ */
+
+.upload-card {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 30px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+}
+
+.upload-area {
+    min-height: 300px;
+    border: 2px dashed var(--border-color);
+    border-radius: 18px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    padding: 40px 20px;
+    text-align: center;
+
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.upload-area:hover,
+.upload-area.drag-over {
+    border-color: var(--primary-color);
+    background: #f0f7f0;
+}
+
+.upload-icon {
+    font-size: 3rem;
+    margin-bottom: 16px;
+}
+
+.upload-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.upload-description,
+.upload-format {
+    color: var(--muted-color);
+}
+
+.upload-format {
+    margin-top: 8px;
+    font-size: 0.85rem;
+}
+
+
+/* ================================
+   Image Preview
+================================ */
+
+.image-preview {
+    margin-top: 24px;
+    text-align: center;
+}
+
+.image-preview img {
+    width: min(100%, 420px);
+    max-height: 420px;
+    object-fit: cover;
+    margin: 0 auto 16px;
+    border-radius: 16px;
+}
+
+#removeImage {
+    border: none;
+    background: transparent;
+    color: #b33a3a;
+    font-weight: 700;
+}
+
+
+/* ================================
+   Identify Button
+================================ */
+
+.identify-button {
+    width: 100%;
+    margin-top: 24px;
+}
+
+.identify-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+
+/* ================================
+   Result
+================================ */
+
+.plant-result-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+
+    padding: 30px;
+    background: var(--surface-color);
+    border: 1px solid var(--border-color);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+}
+
+.result-image img {
+    width: 100%;
+    height: 360px;
+    object-fit: cover;
+    border-radius: 18px;
+}
+
+.result-content {
+    align-self: center;
+}
+
+.result-label {
+    color: var(--primary-color);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+}
+
+.result-content h2 {
+    font-size: 2.2rem;
+    margin: 8px 0;
+}
+
+#scientificName {
+    color: var(--muted-color);
+    font-style: italic;
+    margin-bottom: 20px;
+}
+
+#plantDescription {
+    color: var(--muted-color);
+}
+
+
+/* ================================
+   Footer
+================================ */
+
+.site-footer {
+    padding: 30px 20px;
+    text-align: center;
+    color: var(--muted-color);
+    border-top: 1px solid var(--border-color);
+}
+
+
+/* ================================
+   Dark Mode
+================================ */
+
+body.dark-mode {
+    --bg-color: #101812;
+    --surface-color: #18231b;
+    --text-color: #e8f1e9;
+    --muted-color: #aebcaf;
+    --primary-color: #7fc98d;
+    --primary-dark: #5fae6d;
+    --border-color: #2d3c30;
+    --shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+}
+
+body.dark-mode .site-header {
+    background: rgba(16, 24, 18, 0.92);
+}
+
+body.dark-mode .hero {
+    background:
+        linear-gradient(
+            rgba(16, 24, 18, 0.88),
+            rgba(16, 24, 18, 0.88)
+        ),
+        url("../assets/hero.jpg") center / cover no-repeat;
+}
+
+body.dark-mode .upload-area:hover,
+body.dark-mode .upload-area.drag-over {
+    background: #1d2b20;
+}
+
+
+/* ================================
+   Responsive Design
+================================ */
+
+@media (max-width: 700px) {
+
+    .hero {
+        min-height: 560px;
+        padding: 60px 20px;
+    }
+
+    .upload-card {
+        padding: 18px;
+    }
+
+    .plant-result-card {
+        grid-template-columns: 1fr;
+    }
+
+    .result-image img {
+        height: 280px;
+    }
+
+    .identifier-section,
+    .result-section {
+        padding: 65px 0;
+    }
+}
+
+/* =================================
+   Plant Result
+================================= */
+
+.plant-result-card {
+    display: grid;
+    grid-template-columns: minmax(280px, 0.9fr) minmax(320px, 1.1fr);
+    gap: 40px;
+    padding: 28px;
+    margin-top: 30px;
+    border-radius: 28px;
+    overflow: hidden;
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
+}
+
+.result-image {
+    min-height: 420px;
+    border-radius: 22px;
+    overflow: hidden;
+}
+
+.result-image img {
+    width: 100%;
+    height: 100%;
+    min-height: 420px;
+    object-fit: cover;
+    display: block;
+}
+
+.result-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.result-label {
+    margin: 0 0 8px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.result-content h2 {
+    margin: 0 0 8px;
+    font-size: clamp(2rem, 4vw, 3rem);
+    line-height: 1.1;
+}
+
+.scientific-name {
+    margin: 0 0 28px;
+    font-size: 1.05rem;
+    font-style: italic;
+    opacity: 0.7;
+}
+
+
+/* =================================
+   Result Statistics
+================================= */
+
+.result-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+.stat-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: 10px;
+    align-items: center;
+    padding: 16px;
+    border-radius: 16px;
+    background: rgba(46, 125, 50, 0.08);
+}
+
+.stat-icon {
+    grid-row: span 2;
+    font-size: 1.5rem;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    opacity: 0.65;
+}
+
+.stat-card strong {
+    font-size: 1rem;
+}
+
+
+/* =================================
+   Plant Information
+================================= */
+
+.plant-information {
+    padding: 22px;
+    border-radius: 18px;
+    border-left: 4px solid #2e7d32;
+    background: rgba(46, 125, 50, 0.06);
+}
+
+.plant-information h3 {
+    margin: 0 0 12px;
+    font-size: 1.15rem;
+}
+
+.plant-information p {
+    margin: 0;
+    line-height: 1.7;
+    opacity: 0.8;
+}
+
+
+/* =================================
+   Mobile
+================================= */
+
+@media (max-width: 768px) {
+
+    .plant-result-card {
+        grid-template-columns: 1fr;
+        padding: 18px;
+        gap: 24px;
+    }
+
+    .result-image,
+    .result-image img {
+        min-height: 300px;
+    }
+
+    .result-stats {
+        grid-template-columns: 1fr;
+    }
+
+}
+/* =================================
+   Enhanced Plant Result
+================================= */
+
+.plant-result-card {
+    overflow: hidden;
+    border-radius: 24px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.plant-result-card:hover {
+    transform: translateY(-4px);
+}
+
+.result-image img {
+    width: 100%;
+    height: 100%;
+    min-height: 360px;
+    object-fit: cover;
+    display: block;
+}
+
+.result-content {
+    padding: 32px;
+}
+
+.result-label {
+    color: #4f8f5b;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 10px;
+}
+
+#plantName {
+    margin-bottom: 8px;
+    font-size: 2rem;
+}
+
+.scientific-name {
+    font-style: italic;
+    opacity: 0.75;
+    margin-bottom: 24px;
+}
+
+.result-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.stat-card {
+    padding: 18px;
+    border-radius: 18px;
+    background: rgba(79, 143, 91, 0.08);
+    border: 1px solid rgba(79, 143, 91, 0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.stat-icon {
+    font-size: 1.5rem;
+}
+
+.stat-label {
+    font-size: 0.85rem;
+    opacity: 0.7;
+}
+
+.stat-card strong {
+    font-size: 1.15rem;
+}
+
+.plant-information {
+    padding: 24px;
+    border-radius: 20px;
+    background: rgba(79, 143, 91, 0.06);
+    border: 1px solid rgba(79, 143, 91, 0.12);
+}
+
+.plant-information h3 {
+    margin-bottom: 18px;
+}
+
+.plant-info-content {
+    line-height: 1.8;
+}
+
+.plant-info-content strong {
+    font-weight: 700;
+}
+
+
+/* =================================
+   Mobile Result
+================================= */
+
+@media (max-width: 700px) {
+
+    .result-content {
+        padding: 22px;
+    }
+
+    .result-image img {
+        min-height: 260px;
+    }
+
+    #plantName {
+        font-size: 1.6rem;
+    }
+
+    .result-stats {
+        grid-template-columns: 1fr;
+    }
+
+    .plant-information {
+        padding: 18px;
+    }
+}
+
+.info-row {
+    display: grid;
+    grid-template-columns: 180px 40px 1fr;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(79, 143, 91, 0.12);
+}
+
+.info-row:last-child {
+    border-bottom: none;
+}
+
+.info-row > span:first-child {
+    font-weight: 600;
+}
+
+.info-arrow {
+    text-align: center;
+    font-size: 1.1rem;
+    opacity: 0.6;
+}
+
+.info-row strong {
+    text-align: left;
+    font-weight: 700;
+}
