@@ -2,11 +2,12 @@ const express = require("express");
 const multer = require("multer");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const path = require("path");
 
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 
 // ================================
@@ -14,8 +15,17 @@ const PORT = 3000;
 // ================================
 
 app.use(cors());
-
 app.use(express.json());
+
+
+// ================================
+// Serve Frontend
+// ================================
+
+// Frontend files are one folder above /server
+const frontendPath = path.join(__dirname, "..");
+
+app.use(express.static(frontendPath));
 
 
 // ================================
@@ -32,15 +42,11 @@ const upload = multer({
 
 
 // ================================
-// Test Route
+// Home Page
 // ================================
 
 app.get("/", (req, res) => {
-
-    res.json({
-        message: "Plant Identifier API is running 🌱"
-    });
-
+    res.sendFile(path.join(frontendPath, "index.html"));
 });
 
 
@@ -55,27 +61,17 @@ app.post(
 
         try {
 
-            // Check whether an image was uploaded
-
             if (!req.file) {
-
                 return res.status(400).json({
                     error: "No image was uploaded."
                 });
-
             }
 
-
-            // Check whether the API key exists
-
             if (!process.env.PLANTNET_API_KEY) {
-
                 return res.status(500).json({
                     error: "PlantNet API key is not configured."
                 });
-
             }
-
 
             console.log(
                 "Image received:",
@@ -96,13 +92,11 @@ app.post(
                 }
             );
 
-
             formData.append(
                 "images",
                 imageBlob,
                 req.file.originalname
             );
-
 
             formData.append(
                 "organs",
@@ -119,7 +113,6 @@ app.post(
                 encodeURIComponent(process.env.PLANTNET_API_KEY),
                 {
                     method: "POST",
-
                     body: formData
                 }
             );
@@ -146,7 +139,6 @@ app.post(
                     error: "Plant identification failed.",
                     details: data
                 });
-
             }
 
 
@@ -163,28 +155,14 @@ app.post(
             res.status(500).json({
                 error: "Something went wrong on the server."
             });
-
         }
-
     }
 );
 
 
 // ================================
-// Start Server
-// ================================
-
-app.listen(PORT, () => {
-
-    console.log(
-        `Plant Identifier backend running at http://localhost:${PORT}`
-    );
-
-});
-
-// ========================================
 // GBIF Plant Information
-// ========================================
+// ================================
 
 app.get("/api/plant-info", async (req, res) => {
 
@@ -193,11 +171,9 @@ app.get("/api/plant-info", async (req, res) => {
         const scientificName = req.query.name;
 
         if (!scientificName) {
-
             return res.status(400).json({
                 error: "Scientific name is required."
             });
-
         }
 
         const response = await fetch(
@@ -205,9 +181,7 @@ app.get("/api/plant-info", async (req, res) => {
         );
 
         if (!response.ok) {
-
             throw new Error("GBIF request failed.");
-
         }
 
         const data = await response.json();
@@ -223,7 +197,18 @@ app.get("/api/plant-info", async (req, res) => {
         res.status(500).json({
             error: "Unable to get plant information."
         });
-
     }
+});
+
+
+// ================================
+// Start Server
+// ================================
+
+app.listen(PORT, () => {
+
+    console.log(
+        `Plant Identifier server running on port ${PORT}`
+    );
 
 });
