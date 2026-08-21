@@ -222,7 +222,7 @@ if (identifyButton) {
 
 
                 const response = await fetch(
-                    "http://localhost:3000/api/identify",
+                    "https://plant-identifier-np5i.onrender.com/api/identify",
                     {
                         method: "POST",
                         body: formData
