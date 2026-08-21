@@ -75,49 +75,6 @@ The report includes:
 * Family
 * Taxonomic information
 
-## 🚀 How to Run Locally
-
-### 1. Clone the repository
-
-```bash
-git clone https://github.com/YOUR-USERNAME/plant-identifier.git
-```
-
-### 2. Open the project
-
-```bash
-cd plant-identifier
-```
-
-### 3. Install dependencies
-
-If your project uses a Node.js server, install the required packages:
-
-```bash
-npm install
-```
-
-### 4. Configure API credentials
-
-Create an `.env` file if your project requires environment variables.
-
-**Never upload your `.env` file to GitHub.**
-
-Example:
-
-```env
-PLANTNET_API_KEY=your_api_key_here
-```
-
-### 5. Start the server
-
-Use the start command configured in your project, for example:
-
-```bash
-node server.js
-```
-
-Then open the local address shown by your server in the browser.
 
 ## 📂 Project Structure
 
